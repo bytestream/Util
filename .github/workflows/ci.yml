@@ -15,6 +15,7 @@ jobs:
         stability: [prefer-stable]
 
     env:
+      # https://github.com/shivammathur/setup-php/issues/459
       LC_ALL: en_US.UTF-8
 
     name: PHP ${{ matrix.php }} - ${{ matrix.stability }}
