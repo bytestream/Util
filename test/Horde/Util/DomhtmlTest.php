@@ -6,7 +6,7 @@
  * @package    Util
  * @subpackage UnitTests
  */
-class Horde_Util_DomhtmlTest extends PHPUnit_Framework_TestCase
+class Horde_Util_DomhtmlTest extends \PHPUnit\Framework\TestCase
 {
     public function testBug9567()
     {
@@ -192,7 +192,7 @@ EOT;
     {
         $dom = new Horde_Domhtml('<html><body><div>foo</div></body></html>', 'UTF-8');
 
-        $this->assertRegExp(
+        $this->assertMatchesRegularExpression(
             '/"text\/html; charset=utf-8"/',
             $dom->returnHtml(array('metacharset' => true))
         );

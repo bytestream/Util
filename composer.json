@@ -21,36 +21,21 @@
             "role": "developer"
         }
     ],
-    "version": "2.5.9",
-    "time": "2017-11-11",
-    "repositories": [
-        {
-            "type": "pear",
-            "url": "https://pear.horde.org"
-        }
-    ],
     "require": {
-        "php": "^5.3 || ^7",
+        "php": "^7.4 || ^8.0",
         "ext-dom": "*"
     },
-    "suggest": {
-        "pear-pear.horde.org/Horde_Imap_Client": "^2",
-        "pear-pear.horde.org/Horde_Test": "^2.1",
-        "ext-ctype": "*",
-        "ext-filter": "*",
-        "ext-iconv": "*",
-        "ext-intl": "*",
-        "ext-json": "*",
-        "ext-mbstring": "*",
-        "ext-xml": "*"
-    },
-    "replace": {
-        "pear-pear.horde.org/Horde_Util": "2.*",
-        "pear-horde/Horde_Util": "2.*"
+    "require-dev": {
+        "phpunit/phpunit": "^9.5"
     },
     "autoload": {
         "psr-0": {
-            "Horde_Util": "lib/"
+            "Horde": "lib/"
+        }
+    },
+    "autoload-dev": {
+        "psr-0": {
+            "Horde_Util": "test/"
         }
     }
 }
