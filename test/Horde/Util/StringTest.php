@@ -6,10 +6,11 @@
  * @package    Util
  * @subpackage UnitTests
  */
-class Horde_Util_StringTest extends PHPUnit_Framework_TestCase
+class Horde_Util_StringTest extends \PHPUnit\Framework\TestCase
 {
-    public function tearDown()
+    public function tearDown(): void
     {
+        parent::tearDown();
         setlocale(LC_ALL, '');
     }
 

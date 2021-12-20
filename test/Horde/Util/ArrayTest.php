@@ -6,10 +6,12 @@
  * @package    Util
  * @subpackage UnitTests
  */
-class Horde_Util_ArrayTest extends PHPUnit_Framework_TestCase
+class Horde_Util_ArrayTest extends \PHPUnit\Framework\TestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
+        parent::setUp();
+
         $this->array = array(
             array('name' => 'foo', 'desc' => 'foo long desc'),
             array('name' => 'aaaa', 'desc' => 'aaa foo long desc'),
