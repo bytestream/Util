@@ -1,6 +1,6 @@
 {
-    "name": "horde/util",
-    "description": "Utility library",
+    "name": "bytestream/horde-util",
+    "description": "Horde utility library",
     "type": "library",
     "homepage": "https://www.horde.org/libraries/Horde_Util",
     "license": "LGPL-2.1",
