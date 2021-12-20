@@ -103,7 +103,7 @@ class Horde_String_Transliterate
     {
         return extension_loaded('iconv')
             /* Returns false on error. */
-            ? iconv('UTF-8', 'ASCII//TRANSLIT', $str)
+            ? @ iconv('UTF-8', 'ASCII//TRANSLIT', $str)
             : false;
     }
 
