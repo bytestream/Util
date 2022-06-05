@@ -732,4 +732,8 @@ EOT
         );
     }
 
+    public function testInvalidMultibyteCharset()
+    {
+        $this->assertEquals('Test123', Horde_String::convertCharset('Test123', 'invalid', 'utf-8'));
+    }
 }
