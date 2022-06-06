@@ -157,9 +157,13 @@ class Horde_String
 
         /* Try mbstring. */
         if (Horde_Util::extensionExists('mbstring')) {
-            $out = @mb_convert_encoding($input, $to, self::_mbstringCharset($from));
-            if (!empty($out)) {
-                return $out;
+            try {
+                $out = @mb_convert_encoding($input, $to, self::_mbstringCharset($from));
+                if (!empty($out)) {
+                    return $out;
+                }
+            } catch (ValueError $e) {
+                return $input;
             }
         }
 
