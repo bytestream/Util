@@ -163,7 +163,7 @@ class Horde_String
                     return $out;
                 }
             } catch (ValueError $e) {
-                // PHP 8.0 throw a value error when an invalid encoding is passed.
+                return $input;
             }
         }
 
