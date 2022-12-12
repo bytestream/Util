@@ -8,6 +8,8 @@
  */
 class Horde_Util_ArrayTest extends \PHPUnit\Framework\TestCase
 {
+    private array $array;
+
     public function setUp(): void
     {
         parent::setUp();
