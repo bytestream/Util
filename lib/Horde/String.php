@@ -114,14 +114,20 @@ class Horde_String
             ((strlen($input) < 16777216) ||
              !Horde_Util::extensionExists('iconv') ||
              !Horde_Util::extensionExists('mbstring'))) {
-            if (($to == 'utf-8') &&
-                in_array($from, array('iso-8859-1', 'us-ascii', 'utf-8'))) {
-                return utf8_encode($input);
+            if (($to == 'utf-8') && in_array($from, array('iso-8859-1', 'us-ascii', 'utf-8'))) {
+                if (version_compare(PHP_VERSION,'8.2.0') >= 0) {
+                    return \Symfony\Polyfill\Php72::utf8_encode($input);
+                } else {
+                    return utf8_encode($input);
+                }
             }
 
-            if (($from == 'utf-8') &&
-                in_array($to, array('iso-8859-1', 'us-ascii', 'utf-8'))) {
-                return utf8_decode($input);
+            if (($from == 'utf-8') && in_array($to, array('iso-8859-1', 'us-ascii', 'utf-8'))) {
+                if (version_compare(PHP_VERSION,'8.2.0') >= 0) {
+                    return \Symfony\Polyfill\Php72::utf8_decode($input);
+                } else {
+                    return utf8_decode($input);
+                }
             }
         }
 
