@@ -1,4 +1,7 @@
 <?php
+
+use Symfony\Polyfill\Php72\Php72;
+
 /**
  * Provides static methods for charset and locale safe string manipulation.
  *
@@ -116,7 +119,7 @@ class Horde_String
              !Horde_Util::extensionExists('mbstring'))) {
             if (($to == 'utf-8') && in_array($from, array('iso-8859-1', 'us-ascii', 'utf-8'))) {
                 if (version_compare(PHP_VERSION,'8.2.0') >= 0) {
-                    return \Symfony\Polyfill\Php72::utf8_encode($input);
+                    return Php72::utf8_encode($input);
                 } else {
                     return utf8_encode($input);
                 }
@@ -124,7 +127,7 @@ class Horde_String
 
             if (($from == 'utf-8') && in_array($to, array('iso-8859-1', 'us-ascii', 'utf-8'))) {
                 if (version_compare(PHP_VERSION,'8.2.0') >= 0) {
-                    return \Symfony\Polyfill\Php72::utf8_decode($input);
+                    return Php72::utf8_decode($input);
                 } else {
                     return utf8_decode($input);
                 }
@@ -383,7 +386,13 @@ class Horde_String
         $charset = self::lower($charset);
 
         if ($charset == 'utf-8' || $charset == 'utf8') {
-            return strlen(utf8_decode($string));
+            if (version_compare(PHP_VERSION,'8.2.0') >= 0) {
+                $string = Php72::utf8_decode($string);
+            } else {
+                $string = utf8_decode($string);
+            }
+
+            return strlen($string);
         }
 
         if (Horde_Util::extensionExists('mbstring')) {
