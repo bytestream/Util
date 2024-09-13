@@ -1,7 +1,5 @@
 <?php
 
-use Symfony\Polyfill\Php72\Php72;
-
 /**
  * Provides static methods for charset and locale safe string manipulation.
  *
@@ -110,30 +108,6 @@ class Horde_String
      */
     protected static function _convertCharset($input, $from, $to)
     {
-        /* Use utf8_[en|de]code() if possible and if the string isn't too
-         * large (less than 16 MB = 16 * 1024 * 1024 = 16777216 bytes) - these
-         * functions use more memory. */
-        if (Horde_Util::extensionExists('xml') &&
-            ((strlen($input) < 16777216) ||
-             !Horde_Util::extensionExists('iconv') ||
-             !Horde_Util::extensionExists('mbstring'))) {
-            if (($to == 'utf-8') && in_array($from, array('iso-8859-1', 'us-ascii', 'utf-8'))) {
-                if (version_compare(PHP_VERSION,'8.2.0') >= 0) {
-                    return Php72::utf8_encode($input);
-                } else {
-                    return utf8_encode($input);
-                }
-            }
-
-            if (($from == 'utf-8') && in_array($to, array('iso-8859-1', 'us-ascii', 'utf-8'))) {
-                if (version_compare(PHP_VERSION,'8.2.0') >= 0) {
-                    return Php72::utf8_decode($input);
-                } else {
-                    return utf8_decode($input);
-                }
-            }
-        }
-
         /* Try UTF7-IMAP conversions. */
         if (($from == 'utf7-imap') || ($to == 'utf7-imap')) {
             try {
@@ -152,28 +126,13 @@ class Horde_String
             }
         }
 
-        /* Try iconv with transliteration. */
-        if (Horde_Util::extensionExists('iconv')) {
-            unset($php_errormsg);
-            ini_set('track_errors', 1);
-            $out = @iconv($from, $to . '//TRANSLIT', $input);
-            $errmsg = isset($php_errormsg);
-            ini_restore('track_errors');
-            if (!$errmsg && $out !== false) {
+        try {
+            $out = @mb_convert_encoding($input, $to, self::_mbstringCharset($from));
+            if (!empty($out)) {
                 return $out;
             }
-        }
-
-        /* Try mbstring. */
-        if (Horde_Util::extensionExists('mbstring')) {
-            try {
-                $out = @mb_convert_encoding($input, $to, self::_mbstringCharset($from));
-                if (!empty($out)) {
-                    return $out;
-                }
-            } catch (ValueError $e) {
-                return $input;
-            }
+        } catch (ValueError $e) {
+            return $input;
         }
 
         return $input;
@@ -385,26 +344,9 @@ class Horde_String
     {
         $charset = self::lower($charset);
 
-        if ($charset == 'utf-8' || $charset == 'utf8') {
-            if (version_compare(PHP_VERSION,'8.2.0') >= 0) {
-                $string = Php72::utf8_decode($string);
-            } else {
-                $string = utf8_decode($string);
-            }
-
-            return strlen($string);
-        }
-
-        if (Horde_Util::extensionExists('mbstring')) {
-            $ret = @mb_strlen($string, self::_mbstringCharset($charset));
-            if (!empty($ret)) {
-                return $ret;
-            }
-        }
-        if (Horde_Util::extensionExists('intl')) {
-            return grapheme_strlen(
-                self::convertCharset($string, $charset, 'UTF-8')
-            );
+        $ret = @mb_strlen($string, self::_mbstringCharset($charset));
+        if (!empty($ret)) {
+            return $ret;
         }
 
         return strlen($string);
